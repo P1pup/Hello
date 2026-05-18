@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Try Menghong – IT Student at Build Bright University, Service Advisor at Kubota Seanghy Group.">
+    <title>Try Menghong | Portfolio v3</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg: #05070d;
+            --bg2: #080c15;
+            --bg3: #0c1220;
+            --surface: #101825;
+            --card: #131b28;
+            --border: #1e2d42;
+            --border2: #243347;
+            --blue: #4f9eff;
+            --blue2: #6db3ff;
+            --purple: #a78bfa;
+            --cyan: #22d3ee;
+            --green: #34d399;
+            --gold: #fbbf24;
+            --red: #f87171;
+            --pink: #f472b6;
+            --text: #e8f0fe;
+            --text2: #7d9ab5;
+            --text3: #4d6480;
+            --font-display: 'Syne', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+            --r: 16px;
+            --r2: 24px;
+            --ease: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-body);
+            line-height: 1.65;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        ::selection { background: var(--blue); color: #000; }
+
+        /* ── SPLASH SCREEN ─────────────────────────────── */
+        .splash {
+            position: fixed; inset: 0; z-index: 99999;
+            background: var(--bg);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            transition: opacity 0.6s, visibility 0.6s;
+        }
+        .splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .splash-logo {
+            font-family: var(--font-display);
+            font-size: 3rem; font-weight: 800;
+            background: linear-gradient(120deg, #fff, var(--blue), var(--purple));
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            animation: splash-pulse 1.5s ease-in-out infinite;
+        }
+        .splash-bar {
+            width: 200px; height: 3px; background: var(--border);
+            border-radius: 99px; margin-top: 24px; overflow: hidden;
+        }
+        .splash-fill {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, var(--blue), var(--purple), var(--cyan));
+            border-radius: 99px;
+            animation: splash-load 1.8s ease forwards;
+        }
+        .splash-ver {
+            font-family: var(--font-mono); font-size: 0.7rem;
+            color: var(--text3); margin-top: 12px; letter-spacing: 0.1em;
+        }
+        @keyframes splash-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        @keyframes splash-load {
+            0% { width: 0%; }
+            60% { width: 70%; }
+            100% { width: 100%; }
+        }
+
+        /* ── CUSTOM CURSOR GLOW ────────────────────────── */
+        .cursor-glow {
+            position: fixed;
+            width: 400px; height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(79,158,255,0.06) 0%, transparent 70%);
+            pointer-events: none; z-index: -1;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s;
+        }
+
+        /* ── BACKGROUND GRID + GLOW ─────────────────── */
+        .bg-layer {
+            position: fixed; inset: 0; z-index: -2; overflow: hidden;
+        }
+        .bg-grid {
+            position: absolute; inset: 0;
+            background-image:
+                    linear-gradient(rgba(79,158,255,0.04) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(79,158,255,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
+        }
+        .bg-orb {
+            position: absolute; border-radius: 50%;
+            filter: blur(80px); opacity: 0.18;
+            animation: orb-drift 18s ease-in-out infinite alternate;
+        }
+        .bg-orb.o1 { width: 700px; height: 700px; background: var(--blue); top: -200px; left: -200px; animation-delay: 0s; }
+        .bg-orb.o2 { width: 500px; height: 500px; background: var(--purple); bottom: -150px; right: -100px; animation-delay: -6s; }
+        .bg-orb.o3 { width: 400px; height: 400px; background: var(--cyan); top: 40%; left: 30%; animation-delay: -12s; }
+        @keyframes orb-drift {
+            from { transform: translate(0,0) scale(1); }
+            to { transform: translate(40px, 30px) scale(1.1); }
+        }
+
+        /* ── PARTICLE CANVAS ───────────────────────────── */
+        #particles {
+            position: fixed; inset: 0; z-index: -1;
+            pointer-events: none;
+        }
+
+        /* ── SCROLL PROGRESS ─────────────────────────── */
+        .scroll-bar {
+            position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+            background: linear-gradient(90deg, var(--blue), var(--purple), var(--cyan));
+            z-index: 9999; transition: width 0.1s linear;
+            box-shadow: 0 0 8px var(--blue);
+        }
+
+        /* ── HEADER ──────────────────────────────────── */
+        header {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(5,7,13,0.8);
+            backdrop-filter: blur(24px) saturate(180%);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav {
+            max-width: 1300px; margin: 0 auto;
+            padding: 14px 24px;
+            display: flex; align-items: center; gap: 16px;
+        }
+        .logo {
+            font-family: var(--font-display);
+            font-weight: 800; font-size: 1.15rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(120deg, #fff, var(--blue));
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            cursor: pointer; white-space: nowrap;
+        }
+        .logo em { color: var(--blue); font-style: normal; -webkit-background-clip: unset; background-clip: unset; }
+        .version-badge {
+            font-family: var(--font-mono); font-size: 0.55rem;
+            padding: 2px 8px; border-radius: 999px;
+            background: rgba(167,139,250,0.15); border: 1px solid rgba(167,139,250,0.3);
+            color: var(--purple); letter-spacing: 0.05em;
+        }
+
+        .nav-links {
+            display: flex; list-style: none; gap: 4px; margin-left: auto;
+        }
+        .nav-links a {
+            color: var(--text2); text-decoration: none; font-size: 0.82rem;
+            font-weight: 500; padding: 6px 12px; border-radius: 8px;
+            transition: all 0.2s; letter-spacing: 0.01em;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text); background: rgba(79,158,255,0.1);
+        }
+        .nav-actions { display: flex; gap: 8px; align-items: center; }
+        .btn-icon {
+            width: 36px; height: 36px; border-radius: 10px;
+            background: transparent; border: 1px solid var(--border);
+            color: var(--text2); cursor: pointer; display: flex;
+            align-items: center; justify-content: center; font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+        .btn-icon:hover { border-color: var(--blue); color: var(--blue); background: rgba(79,158,255,0.08); }
+        .menu-toggle { display: none; }
+
+        /* MOBILE NAV */
+        @media (max-width: 900px) {
+            .nav-links {
+                display: none; position: fixed; inset: 0; top: 62px;
+                background: rgba(5,7,13,0.97); backdrop-filter: blur(20px);
+                flex-direction: column; align-items: center; justify-content: center;
+                gap: 8px; z-index: 999;
+            }
+            .nav-links.open { display: flex; }
+            .nav-links a { font-size: 1.1rem; padding: 12px 32px; width: 220px; text-align: center; }
+            .menu-toggle { display: flex; }
+        }
+
+        /* ── WRAPPER ─────────────────────────────────── */
+        .wrap { max-width: 1300px; margin: 0 auto; padding: 90px 24px 60px; }
+        @media (max-width: 600px) { .wrap { padding: 76px 16px 48px; } }
+
+        /* ── HERO ────────────────────────────────────── */
+        .hero {
+            min-height: 88vh; display: flex; flex-direction: column;
+            justify-content: center; padding: 40px 0 20px;
+            position: relative;
+        }
+        .hero-tag {
+            font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.15em;
+            color: var(--blue); background: rgba(79,158,255,0.08);
+            border: 1px solid rgba(79,158,255,0.2); padding: 5px 14px;
+            border-radius: 999px; display: inline-flex; align-items: center; gap: 6px;
+            margin-bottom: 28px; width: fit-content;
+        }
+        .hero-tag .dot-live {
+            width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+            animation: pulse-dot 2s ease infinite;
+        }
+        @keyframes pulse-dot {
+            0%,100% { box-shadow: 0 0 0 0 rgba(52,211,153,0.5); }
+            50% { box-shadow: 0 0 0 6px rgba(52,211,153,0); }
+        }
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.8rem, 9vw, 6.5rem);
+            font-weight: 800; line-height: 1.0; letter-spacing: -0.04em;
+            margin-bottom: 6px;
+        }
+        .hero h1 .name { color: var(--text); display: block; }
+        .hero h1 .title-line {
+            background: linear-gradient(120deg, var(--blue), var(--purple) 50%, var(--cyan));
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            background-size: 200%; animation: shimmer 6s linear infinite;
+        }
+        @keyframes shimmer { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+        .hero-sub {
+            font-size: clamp(0.95rem, 2vw, 1.15rem); color: var(--text2);
+            max-width: 560px; margin: 18px 0 36px; font-weight: 300; line-height: 1.7;
+        }
+        .typing-wrap { min-height: 1.7em; }
+        .cursor { display: inline-block; width: 2px; height: 1em; background: var(--blue); margin-left: 2px; animation: blink 1s step-end infinite; vertical-align: middle; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 40px; }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 24px; border-radius: 12px; font-size: 0.88rem;
+            font-weight: 600; cursor: pointer; text-decoration: none;
+            transition: all 0.25s; border: none; letter-spacing: 0.01em;
+            font-family: var(--font-body);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--blue), var(--purple));
+            color: #fff; box-shadow: 0 4px 20px rgba(79,158,255,0.25);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(79,158,255,0.4); }
+        .btn-outline {
+            background: transparent; color: var(--text);
+            border: 1px solid var(--border2);
+        }
+        .btn-outline:hover { border-color: var(--blue); background: rgba(79,158,255,0.06); transform: translateY(-2px); }
+        .btn-ghost {
+            background: rgba(79,158,255,0.07);
+            border: 1px solid rgba(79,158,255,0.2); color: var(--blue);
+        }
+        .btn-ghost:hover { background: rgba(79,158,255,0.14); transform: translateY(-2px); }
+        @media (max-width: 480px) {
+            .hero-cta { flex-direction: column; }
+            .btn { width: 100%; justify-content: center; }
+        }
+
+        .socials { display: flex; gap: 12px; }
+        .social {
+            width: 42px; height: 42px; border-radius: 12px;
+            background: var(--surface); border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text2); text-decoration: none; font-size: 1rem;
+            transition: all 0.25s;
+        }
+        .social:hover { border-color: var(--blue); color: var(--blue); background: rgba(79,158,255,0.08); transform: translateY(-3px); }
+
+        /* ── STATS ───────────────────────────────────── */
+        .stats-row {
+            display: grid; grid-template-columns: repeat(4,1fr); gap: 12px;
+            margin: 48px 0;
+        }
+        @media (max-width: 700px) { .stats-row { grid-template-columns: repeat(2,1fr); } }
+        .stat {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: var(--r2); padding: 24px 16px; text-align: center;
+            cursor: pointer; transition: all 0.25s; position: relative; overflow: hidden;
+        }
+        .stat::after {
+            content: ''; position: absolute; inset: 0; border-radius: var(--r2);
+            background: linear-gradient(135deg, var(--blue), var(--purple));
+            opacity: 0; transition: opacity 0.25s; z-index: 0;
+        }
+        .stat:hover { border-color: var(--blue); transform: translateY(-4px); }
+        .stat:hover::after { opacity: 0.06; }
+        .stat > * { position: relative; z-index: 1; }
+        .stat-num {
+            font-family: var(--font-display); font-size: 2.2rem; font-weight: 800;
+            color: var(--blue); line-height: 1;
+        }
+        .stat-label { font-size: 0.7rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 6px; }
+
+        /* ── SECTION HEADER ──────────────────────────── */
+        .s-head { text-align: center; margin-bottom: 40px; }
+        .s-tag {
+            font-family: var(--font-mono); font-size: 0.65rem; color: var(--blue);
+            letter-spacing: 0.15em; opacity: 0.8; margin-bottom: 10px;
+        }
+        .s-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.6rem, 5vw, 2.8rem);
+            font-weight: 800; letter-spacing: -0.03em; line-height: 1.1;
+            margin-bottom: 12px;
+        }
+        .s-sub { color: var(--text2); font-size: 0.9rem; max-width: 500px; margin: 0 auto; }
+        .section { padding: 80px 0 20px; opacity: 0; transform: translateY(30px); transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
+        .section.visible { opacity: 1; transform: none; }
+
+        /* ── PROJECTS ────────────────────────────────── */
+        .filter-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
+        .f-btn {
+            font-size: 0.78rem; padding: 7px 18px; border-radius: 999px;
+            border: 1px solid var(--border); background: transparent; color: var(--text2);
+            cursor: pointer; transition: all 0.2s; font-family: var(--font-body); font-weight: 500;
+        }
+        .f-btn.active, .f-btn:hover { background: var(--blue); color: #000; border-color: var(--blue); }
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 20px; }
+        @media (max-width: 660px) { .projects-grid { grid-template-columns: 1fr; } }
+
+        .pcard {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: var(--r2); overflow: hidden; transition: all 0.3s var(--ease);
+            cursor: pointer; display: flex; flex-direction: column;
+            transform-style: preserve-3d; perspective: 800px;
+        }
+        .pcard:hover { border-color: var(--blue); transform: translateY(-6px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5); }
+        .pcard.hidden { display: none; }
+        .pcard-img {
+            height: 150px; display: flex; align-items: center; justify-content: center;
+            font-size: 3rem; position: relative; overflow: hidden;
+        }
+        .pcard-img::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(79,158,255,0.3), rgba(167,139,250,0.3));
+        }
+        .pcard-img > * { position: relative; z-index: 1; }
+        .pcard-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+        .badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+        .badge {
+            font-family: var(--font-mono); font-size: 0.62rem; padding: 3px 10px;
+            background: rgba(79,158,255,0.1); border-radius: 999px; color: var(--blue);
+            border: 1px solid rgba(79,158,255,0.2);
+        }
+        .pcard h3 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+        .pcard p { color: var(--text2); font-size: 0.83rem; line-height: 1.55; flex: 1; }
+        .pcard-foot { padding: 16px 20px; border-top: 1px solid var(--border); display: flex; gap: 10px; }
+        .pcard-link {
+            font-size: 0.75rem; font-weight: 600; color: var(--blue);
+            text-decoration: none; display: flex; align-items: center; gap: 5px;
+            transition: opacity 0.2s;
+        }
+        .pcard-link:hover { opacity: 0.7; }
+
+        /* ── SKILLS ──────────────────────────────────── */
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 20px; }
+        .skill-card {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: var(--r2); padding: 24px; transition: all 0.25s;
+        }
+        .skill-card:hover { border-color: var(--blue); transform: translateY(-3px); }
+        .skill-card h3 {
+            font-family: var(--font-display); font-size: 1rem; font-weight: 700;
+            margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
+        }
+        .skill-card h3 i { color: var(--blue); }
+        .skill-list { display: flex; flex-direction: column; gap: 14px; }
+        .sk { display: flex; flex-direction: column; gap: 6px; }
+        .sk-top { display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 500; }
+        .sk-pct { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text2); }
+        .sk-bar { height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
+        .sk-fill { height: 100%; background: linear-gradient(90deg, var(--blue), var(--purple)); width: 0; transition: width 1.4s cubic-bezier(0.2, 0.9, 0.4, 1); border-radius: 99px; }
+
+        /* ── TECH ICONS ──────────────────────────────── */
+        .tech-strip {
+            display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+            padding: 28px; background: var(--card); border: 1px solid var(--border);
+            border-radius: var(--r2); margin-top: 20px;
+        }
+        .tech-chip {
+            display: flex; align-items: center; gap: 8px;
+            padding: 8px 16px; background: var(--surface); border: 1px solid var(--border);
+            border-radius: 10px; font-size: 0.8rem; font-weight: 500; color: var(--text2);
+            transition: all 0.2s; cursor: default;
+        }
+        .tech-chip:hover { border-color: var(--blue); color: var(--text); transform: translateY(-2px); }
+        .tech-chip i, .tech-chip svg { font-size: 1rem; color: var(--blue); }
+        .tech-chip svg { width: 16px; height: 16px; fill: var(--blue); }
+
+        /* ── TIMELINE ────────────────────────────────── */
+        .timeline {
+            position: relative; max-width: 760px; margin: 0 auto;
+        }
+        .timeline::before {
+            content: ''; position: absolute; left: 16px; top: 0; width: 2px; height: 100%;
+            background: linear-gradient(180deg, var(--blue), var(--purple) 60%, transparent);
+        }
+        @media (min-width: 700px) {
+            .timeline::before { left: 50%; transform: translateX(-50%); }
+        }
+        .t-item { margin-bottom: 32px; position: relative; padding-left: 52px; }
+        @media (min-width: 700px) {
+            .t-item { padding-left: 0; width: 50%; }
+            .t-item:nth-child(odd) { margin-left: 50%; padding-left: 40px; }
+            .t-item:nth-child(even) { padding-right: 40px; text-align: right; }
+        }
+        .t-dot {
+            position: absolute; left: 9px; top: 18px;
+            width: 16px; height: 16px; border-radius: 50%;
+            background: var(--bg); border: 2px solid var(--blue);
+            box-shadow: 0 0 10px rgba(79,158,255,0.4); z-index: 1;
+        }
+        @media (min-width: 700px) {
+            .t-dot { left: auto; right: -8px; }
+            .t-item:nth-child(odd) .t-dot { left: -8px; right: auto; }
+        }
+        .t-box {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: var(--r2); padding: 20px; transition: all 0.25s;
+        }
+        .t-box:hover { border-color: var(--blue); transform: translateX(4px); }
+        @media (min-width: 700px) {
+            .t-box:hover { transform: translateY(-2px); }
+        }
+        .t-box h4 { font-family: var(--font-display); font-weight: 700; font-size: 1rem; margin-bottom: 2px; }
+        .t-date { font-family: var(--font-mono); font-size: 0.68rem; color: var(--blue); margin-bottom: 8px; }
+        .t-box p { color: var(--text2); font-size: 0.82rem; line-height: 1.55; }
+
+        /* ── CERTS ───────────────────────────────────── */
+        .certs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap: 16px; }
+        .cert {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: var(--r2); padding: 24px 20px; text-align: center;
+            transition: all 0.25s;
+        }
+        .cert:hover { border-color: var(--purple); transform: translateY(-4px); background: rgba(167,139,250,0.04); }
+        .cert i { font-size: 2.2rem; color: var(--blue); margin-bottom: 12px; display: block; }
+        .cert h4 { font-family: var(--font-display); font-size: 0.9rem; font-weight: 700; margin-bottom: 4px; }
+        .cert span { font-size: 0.72rem; color: var(--text3); }
+
+        /* ── FUN FACTS / INTERESTS ──────────────────── */
+        .interests-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 16px;
+        }
+        .interest-card {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: var(--r2); padding: 24px; text-align: center;
+            transition: all 0.3s var(--ease); position: relative; overflow: hidden;
+        }
+        .interest-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, var(--blue), var(--purple));
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .interest-card:hover { border-color: var(--blue); transform: translateY(-4px); }
+        .interest-card:hover::before { opacity: 1; }
+        .interest-icon {
+            font-size: 2.4rem; margin-bottom: 12px; display: block;
+        }
+        .interest-card h4 {
+            font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; margin-bottom: 6px;
+        }
+        .interest-card p { font-size: 0.78rem; color: var(--text2); line-height: 1.5; }
+
+        /* ── LANGUAGES SPOKEN ───────────────────────── */
+        .langs-grid {
+            display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+        }
+        .lang-card {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: var(--r2); padding: 24px 32px; text-align: center;
+            transition: all 0.25s; min-width: 160px;
+        }
+        .lang-card:hover { border-color: var(--cyan); transform: translateY(-3px); }
+        .lang-flag { font-size: 2.4rem; margin-bottom: 8px; display: block; }
+        .lang-card h4 { font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+        .lang-level {
+            font-family: var(--font-mono); font-size: 0.68rem;
+            color: var(--cyan); padding: 2px 10px; border-radius: 999px;
+            background: rgba(34,211,238,0.1); border: 1px solid rgba(34,211,238,0.2);
+            display: inline-block;
+        }
+
+        /* ── TERMINAL ────────────────────────────────── */
+        .terminal {
+            background: #070a10; border: 1px solid var(--border);
+            border-radius: var(--r2); overflow: hidden;
+            box-shadow: 0 24px 48px -12px rgba(0,0,0,0.6);
+        }
+        .t-header {
+            background: #0a0e17; padding: 12px 20px;
+            display: flex; align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .t-dots { display: flex; gap: 7px; }
+        .td { width: 12px; height: 12px; border-radius: 50%; }
+        .td.r { background: #ff5f56; } .td.y { background: #ffbd2e; } .td.g { background: #27c93f; }
+        .t-title {
+            flex: 1; text-align: center;
+            font-family: var(--font-mono); font-size: 0.72rem; color: var(--text3);
+        }
+        .t-body {
+            padding: 20px; font-family: var(--font-mono); font-size: 0.78rem;
+            color: var(--green); min-height: 280px; max-height: 380px; overflow-y: auto;
+        }
+        .t-line { margin-bottom: 6px; white-space: pre-wrap; word-break: break-word; }
+        .t-input-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+        .t-prompt { color: var(--blue); }
+        #t-input {
+            background: transparent; border: none; outline: none;
+            color: var(--text); font-family: var(--font-mono); font-size: 0.78rem; flex: 1; caret-color: var(--blue);
+        }
+
+        /* ── MATRIX RAIN CANVAS ─────────────────────── */
+        #matrixCanvas {
+            position: fixed; inset: 0; z-index: 99998;
+            pointer-events: none; display: none;
+        }
+
+        /* ── CONTACT ─────────────────────────────────── */
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        @media (max-width: 700px) { .contact-grid { grid-template-columns: 1fr; } }
+        .contact-box {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: var(--r2); padding: 28px; transition: border-color 0.25s;
+        }
+        .contact-box:hover { border-color: var(--blue); }
+        .contact-box h3 { font-family: var(--font-display); font-weight: 700; margin-bottom: 8px; }
+        .contact-box > p { color: var(--text2); font-size: 0.85rem; margin-bottom: 24px; }
+        .c-detail { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; }
+        .c-icon {
+            width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+            background: rgba(79,158,255,0.1); border: 1px solid rgba(79,158,255,0.15);
+            display: flex; align-items: center; justify-content: center; color: var(--blue);
+        }
+        .c-detail strong { font-size: 0.78rem; color: var(--text2); display: block; margin-bottom: 2px; }
+        .c-detail span { font-size: 0.9rem; }
+        .email-card {
+            background: linear-gradient(135deg, rgba(79,158,255,0.08), rgba(167,139,250,0.08));
+            border: 1px solid rgba(79,158,255,0.15); border-radius: var(--r);
+            padding: 18px; margin-bottom: 16px; text-align: center;
+        }
+        .email-addr { font-family: var(--font-mono); font-size: 0.9rem; color: var(--blue); font-weight: 700; }
+        .btn-full { width: 100%; justify-content: center; border-radius: 12px; }
+        .btn-copy {
+            width: 100%; margin-top: 10px; padding: 10px; border-radius: 10px;
+            background: transparent; border: 1px solid var(--border);
+            color: var(--text2); font-size: 0.82rem; cursor: pointer; font-family: var(--font-body);
+            display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;
+        }
+        .btn-copy:hover { border-color: var(--blue); color: var(--blue); }
+
+        /* ── AVAILABILITY BADGE ──────────────────────── */
+        .avail-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 16px; border-radius: 999px;
+            background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.2);
+            font-size: 0.78rem; color: var(--green); margin-bottom: 24px; font-weight: 500;
+        }
+        .avail-dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; animation: pulse-dot 2s ease infinite; }
+
+        /* ── FOOTER ──────────────────────────────────── */
+        footer {
+            text-align: center; padding: 40px 20px;
+            border-top: 1px solid var(--border);
+            font-family: var(--font-mono); font-size: 0.68rem; color: var(--text3);
+            margin-top: 60px;
+        }
+
+        /* ── TOAST ───────────────────────────────────── */
+        .toast {
+            position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+            background: linear-gradient(135deg, var(--blue), var(--purple));
+            color: #fff; padding: 10px 22px; border-radius: 999px;
+            font-size: 0.82rem; z-index: 9999; opacity: 0;
+            transition: all 0.35s var(--ease); white-space: nowrap;
+            box-shadow: 0 8px 24px rgba(79,158,255,0.3);
+            pointer-events: none; font-family: var(--font-body); font-weight: 600;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* ── BACK TO TOP ─────────────────────────────── */
+        #btt {
+            position: fixed; bottom: 24px; right: 24px;
+            width: 44px; height: 44px; border-radius: 14px;
+            background: linear-gradient(135deg, var(--blue), var(--purple));
+            border: none; color: #fff; cursor: pointer; font-size: 1rem;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; transform: translateY(20px); transition: all 0.3s; z-index: 999;
+            box-shadow: 0 8px 20px rgba(79,158,255,0.3);
+        }
+        #btt.show { opacity: 1; transform: none; }
+        #btt:hover { transform: translateY(-2px); }
+
+        /* ── LIGHT THEME ─────────────────────────────── */
+        body.light {
+            --bg: #f0f4fa; --bg2: #f6f8fc; --bg3: #ffffff;
+            --surface: #ffffff; --card: #f8fafd;
+            --border: #d0dae8; --border2: #b8c8dc;
+            --text: #0f1929; --text2: #4a6080; --text3: #7a96b0;
+        }
+        body.light .bg-grid { background-image: linear-gradient(rgba(79,158,255,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(79,158,255,0.07) 1px, transparent 1px); }
+        body.light header { background: rgba(240,244,250,0.9); }
+        body.light .terminal { background: #1a1e2a; }
+        body.light .t-header { background: #13171f; }
+        body.light #t-input { color: #e0eaf5; }
+        body.light .cursor-glow { background: radial-gradient(circle, rgba(79,158,255,0.04) 0%, transparent 70%); }
+        body.light .splash { background: var(--bg); }
+
+        /* ── GLOW PULSE ON CARD HOVER ────────────────── */
+        @keyframes card-glow {
+            from { box-shadow: 0 0 0 rgba(79,158,255,0); }
+            to { box-shadow: 0 0 24px rgba(79,158,255,0.15); }
+        }
+        .pcard:hover, .skill-card:hover { animation: card-glow 0.3s forwards; }
+
+        /* ── PROGRESS RING (reading) ─────────────────── */
+        #progress-ring {
+            position: fixed; bottom: 76px; right: 24px; z-index: 999;
+            width: 42px; height: 42px; cursor: pointer;
+        }
+        #progress-ring svg { transform: rotate(-90deg); }
+        #progress-ring circle.bg { fill: none; stroke: var(--border); stroke-width: 3; }
+        #progress-ring circle.fg { fill: none; stroke: var(--blue); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 119; stroke-dashoffset: 119; transition: stroke-dashoffset 0.2s; }
+        #ring-pct { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 0.58rem; color: var(--blue); font-weight: 700; }
+
+        /* ── KEYBOARD SHORTCUT HINT ──────────────────── */
+        .kbd-hint {
+            position: fixed; bottom: 24px; left: 24px; z-index: 999;
+            font-family: var(--font-mono); font-size: 0.62rem; color: var(--text3);
+            opacity: 0.5; transition: opacity 0.3s;
+        }
+        .kbd-hint:hover { opacity: 1; }
+        .kbd {
+            display: inline-block; padding: 2px 6px; border-radius: 4px;
+            background: var(--surface); border: 1px solid var(--border);
+            font-size: 0.6rem; margin: 0 1px;
+        }
+        @media (max-width: 700px) { .kbd-hint { display: none; } }
+
+        /* ── EASTER EGG CONFETTI ─────────────────────── */
+        .confetti {
+            position: fixed; top: -10px; z-index: 99998;
+            width: 10px; height: 10px; border-radius: 2px;
+            animation: confetti-fall linear forwards;
+            pointer-events: none;
+        }
+        @keyframes confetti-fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="dark">
+
+<!-- SPLASH SCREEN -->
+<div class="splash" id="splash">
+    <div class="splash-logo">TRY MH</div>
+    <div class="splash-bar"><div class="splash-fill"></div></div>
+    <div class="splash-ver">v3.0 // LOADING PORTFOLIO</div>
+</div>
+
+<!-- CURSOR GLOW -->
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<div class="bg-layer">
+    <div class="bg-grid"></div>
+    <div class="bg-orb o1"></div>
+    <div class="bg-orb o2"></div>
+    <div class="bg-orb o3"></div>
+</div>
+<canvas id="particles"></canvas>
+<canvas id="matrixCanvas"></canvas>
+<div class="scroll-bar" id="scrollBar"></div>
+<div class="toast" id="toast"></div>
+
+<!-- HEADER -->
+<header>
+    <nav class="nav">
+        <div class="logo" id="logo">TRY<em> MH</em></div>
+        <span class="version-badge">v3.0</span>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#hero" data-n>Home</a></li>
+            <li><a href="#projects" data-n>Projects</a></li>
+            <li><a href="#skills" data-n>Skills</a></li>
+            <li><a href="#experience" data-n>Journey</a></li>
+            <li><a href="#interests" data-n>Interests</a></li>
+            <li><a href="#console" data-n>Console</a></li>
+            <li><a href="#contact" data-n>Contact</a></li>
+        </ul>
+        <div class="nav-actions">
+            <button class="btn-icon" id="themeBtn" title="Toggle theme"><i class="fas fa-moon" id="themeIco"></i></button>
+            <button class="btn-icon menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+</header>
+
+<main class="wrap">
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+        <span class="hero-tag"><span class="dot-live"></span> AVAILABLE FOR OPPORTUNITIES</span>
+        <h1>
+            <span class="name">Try Menghong</span>
+            <span class="title-line">Portfolio.</span>
+        </h1>
+        <div class="hero-sub">
+            <div class="typing-wrap"><span id="typeTarget"></span><span class="cursor"></span></div>
+        </div>
+        <div class="hero-cta">
+            <button class="btn btn-primary" onclick="smoothScroll('#projects')"><i class="fas fa-code"></i> View Projects</button>
+            <button class="btn btn-outline" onclick="smoothScroll('#contact')"><i class="fas fa-envelope"></i> Contact Me</button>
+            <a href="assets/TRY_MENGHONG_CV.pdf" class="btn btn-ghost" download><i class="fas fa-download"></i> Download CV</a>
+        </div>
+        <div class="socials">
+            <a href="https://www.facebook.com/share/1CzCM2fc7f/" target="_blank" class="social"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/menggg_hong?igsh=Z2draHg2aDZhN215" target="_blank" class="social"><i class="fab fa-instagram"></i></a>
+            <a href="https://t.me/menghongggggg" target="_blank" class="social"><i class="fab fa-telegram-plane"></i></a>
+            <a href="https://github.com/P1pup" target="_blank" class="social"><i class="fab fa-github"></i></a>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <div class="stats-row">
+        <div class="stat" data-tip="9+ academic & personal projects" onclick="toast('9+ academic & personal projects')">
+            <div class="stat-num" id="s1">0</div><div class="stat-label">Projects</div>
+        </div>
+        <div class="stat" data-tip="3+ years combined" onclick="toast('3+ years combined work & study')">
+            <div class="stat-num" id="s2">0</div><div class="stat-label">Years Exp.</div>
+        </div>
+        <div class="stat" data-tip="Customers served" onclick="toast('85+ customers assisted')">
+            <div class="stat-num" id="s3">0</div><div class="stat-label">Customers</div>
+        </div>
+        <div class="stat" data-tip="Commits" onclick="toast('520+ commits across repos')">
+            <div class="stat-num" id="s4">0</div><div class="stat-label">Commits</div>
+        </div>
+    </div>
+
+    <!-- PROJECTS -->
+    <section class="section" id="projects">
+        <div class="s-head">
+            <div class="s-tag">// PORTFOLIO</div>
+            <h2 class="s-title">Projects</h2>
+            <p class="s-sub">Built with Python, Flutter, and Web Technologies</p>
+            <div class="filter-row" style="margin-top:20px">
+                <button class="f-btn active" data-f="all">All</button>
+                <button class="f-btn" data-f="backend">Backend</button>
+                <button class="f-btn" data-f="mobile">Mobile</button>
+                <button class="f-btn" data-f="fullstack">Full Stack</button>
+            </div>
+        </div>
+        <div class="projects-grid" id="pgrid">
+            <div class="pcard" data-cat="backend">
+                <div class="pcard-img" style="background: linear-gradient(135deg,#0f2744,#1a3a6b)">
+                    <i class="fas fa-tasks" style="color:var(--blue);filter:drop-shadow(0 0 12px var(--blue))"></i>
+                </div>
+                <div class="pcard-body">
+                    <div class="badges"><span class="badge">Python</span><span class="badge">SQLite</span><span class="badge">Tkinter</span></div>
+                    <h3>Service Ticket Manager</h3>
+                    <p>Desktop app for logging customer machinery issues, tracking technician assignments, and generating reports — inspired by my Service Advisor role at Kubota.</p>
+                </div>
+                <div class="pcard-foot">
+                    <a href="#" class="pcard-link"><i class="fab fa-github"></i> Source</a>
+                    <a href="#" class="pcard-link" style="margin-left:auto"><i class="fas fa-external-link-alt"></i> Demo</a>
+                </div>
+            </div>
+            <div class="pcard" data-cat="mobile">
+                <div class="pcard-img" style="background: linear-gradient(135deg,#1a1040,#2d1a6b)">
+                    <i class="fas fa-mobile-alt" style="color:var(--purple);filter:drop-shadow(0 0 12px var(--purple))"></i>
+                </div>
+                <div class="pcard-body">
+                    <div class="badges"><span class="badge">Flutter</span><span class="badge">Firebase</span><span class="badge">Dart</span></div>
+                    <h3>Inventory Tracker</h3>
+                    <p>Cross-platform stock management app with barcode scanning, real-time Firebase sync, used for store inventory counting in a real business environment.</p>
+                </div>
+                <div class="pcard-foot">
+                    <a href="#" class="pcard-link"><i class="fab fa-github"></i> Source</a>
+                    <a href="#" class="pcard-link" style="margin-left:auto"><i class="fas fa-external-link-alt"></i> Demo</a>
+                </div>
+            </div>
+            <div class="pcard" data-cat="fullstack">
+                <div class="pcard-img" style="background: linear-gradient(135deg,#0f3028,#1a5a45)">
+                    <i class="fas fa-chart-line" style="color:var(--green);filter:drop-shadow(0 0 12px var(--green))"></i>
+                </div>
+                <div class="pcard-body">
+                    <div class="badges"><span class="badge">Flask</span><span class="badge">Chart.js</span><span class="badge">SQLite</span></div>
+                    <h3>Sales Analytics Dashboard</h3>
+                    <p>Web dashboard to visualize monthly sales-out lists, customer reports, and performance metrics — inspired by DJI Agriculture workflows.</p>
+                </div>
+                <div class="pcard-foot">
+                    <a href="#" class="pcard-link"><i class="fab fa-github"></i> Source</a>
+                    <a href="#" class="pcard-link" style="margin-left:auto"><i class="fas fa-external-link-alt"></i> Demo</a>
+                </div>
+            </div>
+            <div class="pcard" data-cat="fullstack">
+                <div class="pcard-img" style="background: linear-gradient(135deg,#2a1a00,#5a3800)">
+                    <i class="fas fa-calendar-check" style="color:var(--gold);filter:drop-shadow(0 0 12px var(--gold))"></i>
+                </div>
+                <div class="pcard-body">
+                    <div class="badges"><span class="badge">Python</span><span class="badge">HTML/CSS</span><span class="badge">JS</span></div>
+                    <h3>Staff Roster Planner</h3>
+                    <p>Web tool for weekly and monthly staff scheduling, shift assignments, and roster export — built to simplify roster management at DJI Agriculture.</p>
+                </div>
+                <div class="pcard-foot">
+                    <a href="#" class="pcard-link"><i class="fab fa-github"></i> Source</a>
+                </div>
+            </div>
+            <div class="pcard" data-cat="backend">
+                <div class="pcard-img" style="background: linear-gradient(135deg,#250f30,#4a2060)">
+                    <i class="fas fa-file-invoice" style="color:var(--purple);filter:drop-shadow(0 0 12px var(--purple))"></i>
+                </div>
+                <div class="pcard-body">
+                    <div class="badges"><span class="badge">Python</span><span class="badge">ReportLab</span></div>
+                    <h3>Invoice Generator</h3>
+                    <p>Automated invoice/document generator for printing services. Handles customer data, pricing, and PDF output — used in a real print shop environment.</p>
+                </div>
+                <div class="pcard-foot">
+                    <a href="#" class="pcard-link"><i class="fab fa-github"></i> Source</a>
+                </div>
+            </div>
+            <div class="pcard" data-cat="mobile">
+                <div class="pcard-img" style="background: linear-gradient(135deg,#0a1f30,#0d3355)">
+                    <i class="fas fa-qrcode" style="color:var(--cyan);filter:drop-shadow(0 0 12px var(--cyan))"></i>
+                </div>
+                <div class="pcard-body">
+                    <div class="badges"><span class="badge">Flutter</span><span class="badge">Dart</span><span class="badge">REST API</span></div>
+                    <h3>QR Scanner App</h3>
+                    <p>Mobile app for scanning QR codes to retrieve and update product or customer records, with offline caching and history log.</p>
+                </div>
+                <div class="pcard-foot">
+                    <a href="#" class="pcard-link"><i class="fab fa-github"></i> Source</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="section" id="skills">
+        <div class="s-head">
+            <div class="s-tag">// EXPERTISE</div>
+            <h2 class="s-title">Skills</h2>
+            <p class="s-sub">Technical and professional abilities</p>
+        </div>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <h3><i class="fas fa-code"></i> Programming</h3>
+                <div class="skill-list">
+                    <div class="sk"><div class="sk-top"><span>Python</span><span class="sk-pct">80%</span></div><div class="sk-bar"><div class="sk-fill" data-w="80"></div></div></div>
+                    <div class="sk"><div class="sk-top"><span>Java</span><span class="sk-pct">70%</span></div><div class="sk-bar"><div class="sk-fill" data-w="70"></div></div></div>
+                    <div class="sk"><div class="sk-top"><span>Dart / Flutter</span><span class="sk-pct">75%</span></div><div class="sk-bar"><div class="sk-fill" data-w="75"></div></div></div>
+                    <div class="sk"><div class="sk-top"><span>HTML / CSS / JS</span><span class="sk-pct">72%</span></div><div class="sk-bar"><div class="sk-fill" data-w="72"></div></div></div>
+                </div>
+            </div>
+            <div class="skill-card">
+                <h3><i class="fas fa-tools"></i> Tools & OS</h3>
+                <div class="skill-list">
+                    <div class="sk"><div class="sk-top"><span>Linux (Fedora)</span><span class="sk-pct">70%</span></div><div class="sk-bar"><div class="sk-fill" data-w="70"></div></div></div>
+                    <div class="sk"><div class="sk-top"><span>Microsoft Office</span><span class="sk-pct">85%</span></div><div class="sk-bar"><div class="sk-fill" data-w="85"></div></div></div>
+                    <div class="sk"><div class="sk-top"><span>Software Install & Config</span><span class="sk-pct">90%</span></div><div class="sk-bar"><div class="sk-fill" data-w="90"></div></div></div>
+                    <div class="sk"><div class="sk-top"><span>Git / Version Control</span><span class="sk-pct">68%</span></div><div class="sk-bar"><div class="sk-fill" data-w="68"></div></div></div>
+                </div>
+            </div>
+            <div class="skill-card">
+                <h3><i class="fas fa-users"></i> Professional</h3>
+                <div class="skill-list">
+                    <div class="sk"><div class="sk-top"><span>Customer Service</span><span class="sk-pct">90%</span></div><div class="sk-bar"><div class="sk-fill" data-w="90"></div></div></div>
+                    <div class="sk"><div class="sk-top"><span>Inventory Control</span><span class="sk-pct">85%</span></div><div class="sk-bar"><div class="sk-fill" data-w="85"></div></div></div>
+                    <div class="sk"><div class="sk-top"><span>Team Coordination</span><span class="sk-pct">80%</span></div><div class="sk-bar"><div class="sk-fill" data-w="80"></div></div></div>
+                    <div class="sk"><div class="sk-top"><span>Report Writing</span><span class="sk-pct">82%</span></div><div class="sk-bar"><div class="sk-fill" data-w="82"></div></div></div>
+                </div>
+            </div>
+        </div>
+        <div class="tech-strip">
+            <div class="tech-chip"><i class="fab fa-python"></i> Python</div>
+            <div class="tech-chip"><i class="fab fa-java"></i> Java</div>
+            <div class="tech-chip">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14.314 0L2.3 12 6 15.7 21.684 0h-7.357zm.014 11.072L7.857 17.53l6.47 6.47H21.7l-6.46-6.468 6.46-6.46h-7.37z"/></svg>
+                Flutter
+            </div>
+            <div class="tech-chip"><i class="fas fa-fire"></i> Firebase</div>
+            <div class="tech-chip"><i class="fab fa-html5"></i> HTML5</div>
+            <div class="tech-chip"><i class="fab fa-css3-alt"></i> CSS3</div>
+            <div class="tech-chip"><i class="fab fa-js"></i> JavaScript</div>
+            <div class="tech-chip"><i class="fab fa-linux"></i> Linux</div>
+            <div class="tech-chip"><i class="fab fa-git-alt"></i> Git</div>
+            <div class="tech-chip"><i class="fas fa-database"></i> SQLite</div>
+            <div class="tech-chip"><i class="fas fa-flask" style="font-style:normal"></i> Flask</div>
+        </div>
+    </section>
+
+    <!-- EXPERIENCE / TIMELINE -->
+    <section class="section" id="experience">
+        <div class="s-head">
+            <div class="s-tag">// JOURNEY</div>
+            <h2 class="s-title">Work & Education</h2>
+            <p class="s-sub">A timeline of professional experience and academic path</p>
+        </div>
+        <div class="timeline">
+            <div class="t-item">
+                <div class="t-dot"></div>
+                <div class="t-box">
+                    <h4>Service Advisor</h4>
+                    <div class="t-date">Oct 2025 - Present</div>
+                    <p>KUBOTA SEANGHY GROUP, Banteay Meanchey — Manage customer inquiries, log technical issues, prepare work orders, coordinate technician dispatch, optimize response times.</p>
+                </div>
+            </div>
+            <div class="t-item">
+                <div class="t-dot"></div>
+                <div class="t-box">
+                    <h4>Assistant Store Manager</h4>
+                    <div class="t-date">Feb 2025 - Sep 2025</div>
+                    <p>DJI AGRICULTURE — Inventory counting, invoice preparation, stock management, monthly staff rosters, and sales-out reports.</p>
+                </div>
+            </div>
+            <div class="t-item">
+                <div class="t-dot"></div>
+                <div class="t-box">
+                    <h4>Document Specialist</h4>
+                    <div class="t-date">Sep 2024 - Jan 2025</div>
+                    <p>Reaksmey Odom Printing Home — Printing, copying, document arrangement, and direct customer assistance.</p>
+                </div>
+            </div>
+            <div class="t-item">
+                <div class="t-dot"></div>
+                <div class="t-box">
+                    <h4>Admin Assistant</h4>
+                    <div class="t-date">2022 - 2023</div>
+                    <p>5 LEADERS BENEFITS SERVICE CO., LTD. — Document printing, invoice preparation, and weekly/monthly customer reports.</p>
+                </div>
+            </div>
+            <div class="t-item">
+                <div class="t-dot" style="border-color:var(--purple);box-shadow:0 0 10px rgba(167,139,250,0.4)"></div>
+                <div class="t-box" style="border-color:rgba(167,139,250,0.3)">
+                    <h4>B.Sc. Information Technology</h4>
+                    <div class="t-date" style="color:var(--purple)">2022 - 2026 (Expected)</div>
+                    <p>Build Bright University — Specializing in software development, databases, network systems, and system analysis.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INTERESTS & FUN FACTS -->
+    <section class="section" id="interests">
+        <div class="s-head">
+            <div class="s-tag">// BEYOND CODE</div>
+            <h2 class="s-title">Interests & Fun Facts</h2>
+            <p class="s-sub">Things that inspire me outside of work</p>
+        </div>
+        <div class="interests-grid">
+            <div class="interest-card">
+                <span class="interest-icon">&#9749;</span>
+                <h4>Coffee Enthusiast</h4>
+                <p>Certified barista skills — I believe the best code is written after a good cup of coffee.</p>
+            </div>
+            <div class="interest-card">
+                <span class="interest-icon">&#127759;</span>
+                <h4>Open Source</h4>
+                <p>Love contributing to and learning from the open-source community. 520+ commits and counting.</p>
+            </div>
+            <div class="interest-card">
+                <span class="interest-icon">&#128218;</span>
+                <h4>Continuous Learner</h4>
+                <p>Always picking up new frameworks, tools, and languages. Currently exploring advanced Flutter and AI.</p>
+            </div>
+            <div class="interest-card">
+                <span class="interest-icon">&#127911;</span>
+                <h4>Music & Focus</h4>
+                <p>Lo-fi beats and ambient sounds are my productivity secret weapons during coding sessions.</p>
+            </div>
+            <div class="interest-card">
+                <span class="interest-icon">&#128736;</span>
+                <h4>Problem Solver</h4>
+                <p>I enjoy breaking down complex real-world problems into clean, automated solutions.</p>
+            </div>
+            <div class="interest-card">
+                <span class="interest-icon">&#127796;</span>
+                <h4>Cambodian Pride</h4>
+                <p>Proud to be building tech skills in Banteay Meanchey, contributing to Cambodia's growing IT scene.</p>
+            </div>
+        </div>
+        <!-- LANGUAGES SPOKEN -->
+        <div style="margin-top: 48px;">
+            <div class="s-head">
+                <div class="s-tag">// LANGUAGES</div>
+                <h2 class="s-title" style="font-size: clamp(1.3rem, 4vw, 2rem);">Languages I Speak</h2>
+            </div>
+            <div class="langs-grid">
+                <div class="lang-card">
+                    <span class="lang-flag">&#127472;&#127469;</span>
+                    <h4>Khmer</h4>
+                    <span class="lang-level">Native</span>
+                </div>
+                <div class="lang-card">
+                    <span class="lang-flag">&#127468;&#127463;</span>
+                    <h4>English</h4>
+                    <span class="lang-level">Intermediate</span>
+                </div>
+                <div class="lang-card">
+                    <span class="lang-flag">&#127481;&#127469;</span>
+                    <h4>Thai</h4>
+                    <span class="lang-level">Basic</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CERTIFICATIONS -->
+    <section class="section" id="certifications">
+        <div class="s-head">
+            <div class="s-tag">// ACHIEVEMENTS</div>
+            <h2 class="s-title">Courses & Certificates</h2>
+            <p class="s-sub">Continuous learning and skill enhancement</p>
+        </div>
+        <div class="certs-grid">
+            <div class="cert"><i class="fas fa-laptop-code"></i><h4>Website Development</h4><span>Online Program</span></div>
+            <div class="cert"><i class="fas fa-mug-hot"></i><h4>Basic Barista Skills</h4><span>Training Center</span></div>
+            <div class="cert"><i class="fas fa-headset"></i><h4>Customer Service</h4><span>Workplace Experience</span></div>
+            <div class="cert"><i class="fas fa-mobile-alt"></i><h4>Flutter Development</h4><span>Self-Directed Study</span></div>
+            <div class="cert"><i class="fab fa-python"></i><h4>Python Programming</h4><span>Self-Directed Study</span></div>
+        </div>
+    </section>
+
+    <!-- TERMINAL CONSOLE -->
+    <section class="section" id="console">
+        <div class="s-head">
+            <div class="s-tag">// INTERACTIVE</div>
+            <h2 class="s-title">Developer Console</h2>
+            <p class="s-sub">Type <code style="color:var(--blue);background:rgba(79,158,255,0.1);padding:2px 8px;border-radius:6px;">help</code> to explore commands</p>
+        </div>
+        <div class="terminal">
+            <div class="t-header">
+                <div class="t-dots"><span class="td r"></span><span class="td y"></span><span class="td g"></span></div>
+                <div class="t-title">menghong@it-student ~ zsh</div>
+            </div>
+            <div class="t-body" id="tbody">
+                <div class="t-line" style="color:var(--blue)">+--------------------------------------------------+</div>
+                <div class="t-line" style="color:var(--green)">|  Portfolio v3.0  |  Type <span style="color:var(--blue)">help</span> to get started     |</div>
+                <div class="t-line" style="color:var(--blue)">+--------------------------------------------------+</div>
+                <div class="t-line" style="color:var(--text3)"> </div>
+                <div class="t-input-row">
+                    <span class="t-prompt">></span>
+                    <input type="text" id="t-input" autocomplete="off" spellcheck="false" placeholder="type a command...">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section" id="contact">
+        <div class="s-head">
+            <div class="s-tag">// CONNECT</div>
+            <h2 class="s-title">Let's Collaborate</h2>
+            <p class="s-sub">Have a project or opportunity? Let's talk.</p>
+        </div>
+        <div class="contact-grid">
+            <div class="contact-box">
+                <div class="avail-badge"><span class="avail-dot"></span> Open to Work & Projects</div>
+                <h3>Get in Touch</h3>
+                <p>IT student passionate about solving real-world problems with code and a customer-centric mindset.</p>
+                <div class="c-detail"><div class="c-icon"><i class="fas fa-envelope"></i></div><div><strong>Email</strong><span>trymenghong@gmail.com</span></div></div>
+                <div class="c-detail"><div class="c-icon"><i class="fas fa-phone"></i></div><div><strong>Phone</strong><span>+855 98 931 313</span></div></div>
+                <div class="c-detail"><div class="c-icon"><i class="fas fa-map-marker-alt"></i></div><div><strong>Location</strong><span>Banteay Meanchey, Cambodia</span></div></div>
+            </div>
+            <div class="contact-box">
+                <i class="fas fa-paper-plane" style="font-size:2.2rem;color:var(--blue);display:block;margin-bottom:16px"></i>
+                <h3>Email Me Directly</h3>
+                <p>I typically respond within 24 hours.</p>
+                <div class="email-card"><div class="email-addr">trymenghong@gmail.com</div></div>
+                <a href="mailto:trymenghong@gmail.com" class="btn btn-primary btn-full"><i class="fas fa-envelope"></i> Open Email Client</a>
+                <button class="btn-copy" id="copyBtn"><i class="fas fa-copy"></i> Copy Email Address</button>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <p>&copy; 2026 Try Menghong &middot; IT Student @ Build Bright University &middot; Portfolio v3.0</p>
+</footer>
+
+<button id="btt" title="Back to top"><i class="fas fa-arrow-up"></i></button>
+<div id="progress-ring">
+    <svg viewBox="0 0 42 42" width="42" height="42">
+        <circle class="bg" cx="21" cy="21" r="19"/>
+        <circle class="fg" id="ringFg" cx="21" cy="21" r="19"/>
+    </svg>
+    <div id="ring-pct">0%</div>
+</div>
+
+<div class="kbd-hint" id="kbdHint">
+    <span class="kbd">1</span>-<span class="kbd">7</span> nav &middot;
+    <span class="kbd">T</span> theme &middot;
+    <span class="kbd">Esc</span> top
+</div>
+
+<script>
+    function smoothScroll(id){document.querySelector(id)?.scrollIntoView({behavior:'smooth'});}
+    var _toastTimer;
+    function toast(msg){var el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(_toastTimer);_toastTimer=setTimeout(function(){el.classList.remove('show');},2800);}
+
+    window.addEventListener('load',function(){setTimeout(function(){document.getElementById('splash').classList.add('hidden');},2200);});
+
+    var cursorGlow=document.getElementById('cursorGlow');
+    var mouseX=0,mouseY=0,glowX=0,glowY=0;
+    document.addEventListener('mousemove',function(e){mouseX=e.clientX;mouseY=e.clientY;});
+    function animateGlow(){glowX+=(mouseX-glowX)*0.08;glowY+=(mouseY-glowY)*0.08;cursorGlow.style.left=glowX+'px';cursorGlow.style.top=glowY+'px';requestAnimationFrame(animateGlow);}
+    animateGlow();
+
+    (function initParticles(){
+        var canvas=document.getElementById('particles');var ctx=canvas.getContext('2d');var W,H,particles=[];
+        function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+        resize();window.addEventListener('resize',resize);
+        for(var i=0;i<60;i++){particles.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+0.5,dx:(Math.random()-0.5)*0.4,dy:(Math.random()-0.5)*0.4,o:Math.random()*0.5+0.2});}
+        function draw(){
+            ctx.clearRect(0,0,W,H);
+            for(var k=0;k<particles.length;k++){var p=particles[k];ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(79,158,255,'+p.o+')';ctx.fill();p.x+=p.dx;p.y+=p.dy;if(p.x<0||p.x>W)p.dx*=-1;if(p.y<0||p.y>H)p.dy*=-1;}
+            for(var i=0;i<particles.length;i++){for(var j=i+1;j<particles.length;j++){var dx=particles[i].x-particles[j].x;var dy=particles[i].y-particles[j].y;var dist=Math.sqrt(dx*dx+dy*dy);if(dist<120){ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);ctx.lineTo(particles[j].x,particles[j].y);ctx.strokeStyle='rgba(79,158,255,'+(0.08*(1-dist/120))+')';ctx.stroke();}}}
+            requestAnimationFrame(draw);
+        }
+        draw();
+    })();
+
+    var body=document.body;var themeBtn=document.getElementById('themeBtn');var themeIco=document.getElementById('themeIco');
+    function applyTheme(t){body.className=t;themeIco.className=t==='dark'?'fas fa-moon':'fas fa-sun';localStorage.setItem('theme',t);}
+    applyTheme(localStorage.getItem('theme')||'dark');
+    themeBtn.addEventListener('click',function(){applyTheme(body.classList.contains('dark')?'light':'dark');});
+
+    var menuToggle=document.getElementById('menuToggle');var navLinks=document.getElementById('navLinks');
+    menuToggle.addEventListener('click',function(){var open=navLinks.classList.toggle('open');menuToggle.innerHTML=open?'<i class="fas fa-times"></i>':'<i class="fas fa-bars"></i>';});
+    document.querySelectorAll('[data-n]').forEach(function(a){a.addEventListener('click',function(){navLinks.classList.remove('open');menuToggle.innerHTML='<i class="fas fa-bars"></i>';});});
+
+    var scrollBar=document.getElementById('scrollBar');var btt=document.getElementById('btt');var ringFg=document.getElementById('ringFg');var ringPct=document.getElementById('ring-pct');
+    window.addEventListener('scroll',function(){var h=document.documentElement;var pct=(h.scrollTop/(h.scrollHeight-h.clientHeight))*100;scrollBar.style.width=pct+'%';btt.classList.toggle('show',window.pageYOffset>200);var circ=119;ringFg.style.strokeDashoffset=circ-(circ*pct/100);ringPct.textContent=Math.round(pct)+'%';});
+    btt.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+    document.getElementById('progress-ring').addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+
+    var lines=["Detail-oriented IT student at Build Bright University.","Service Advisor at Kubota Seanghy Group.","Skilled in Python, Flutter & Linux.","Passionate about building tools that solve real problems.","Coffee lover. Problem solver. Lifelong learner."];
+    var li=0,ci=0,deleting=false;var tgt=document.getElementById('typeTarget');
+    function type(){var cur=lines[li];if(!deleting){tgt.textContent=cur.substring(0,ci+1);ci++;if(ci===cur.length){deleting=true;setTimeout(type,1800);return;}}else{tgt.textContent=cur.substring(0,ci-1);ci--;if(ci===0){deleting=false;li=(li+1)%lines.length;}}setTimeout(type,deleting?32:44);}
+    type();
+
+    function counter(el,target){var c=0;var step=target/50;var run=function(){c+=step;if(c>=target){el.textContent=target+(target>50?'+':'');return;}el.textContent=Math.floor(c);requestAnimationFrame(run);};run();}
+    var statObs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(!e.isIntersecting)return;var targets={s1:9,s2:3,s3:85,s4:520};var id=e.target.id;if(targets[id])counter(e.target,targets[id]);statObs.unobserve(e.target);});},{threshold:0.3});
+    ['s1','s2','s3','s4'].forEach(function(id){statObs.observe(document.getElementById(id));});
+
+    document.querySelectorAll('.sk-fill').forEach(function(b){var obs=new IntersectionObserver(function(entries){if(entries[0].isIntersecting){b.style.width=b.dataset.w+'%';obs.unobserve(b);}},{threshold:0.3});obs.observe(b);});
+
+    document.querySelectorAll('.f-btn').forEach(function(btn){btn.addEventListener('click',function(){document.querySelectorAll('.f-btn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');var f=btn.dataset.f;var n=0;document.querySelectorAll('.pcard').forEach(function(c){var show=f==='all'||c.dataset.cat===f;c.classList.toggle('hidden',!show);if(show)n++;});toast('Showing '+n+' project'+(n!==1?'s':''));});});
+
+    document.querySelectorAll('.pcard').forEach(function(card){
+        card.addEventListener('mousemove',function(e){var rect=card.getBoundingClientRect();var x=e.clientX-rect.left;var y=e.clientY-rect.top;var cx=rect.width/2;var cy=rect.height/2;var rx=(y-cy)/20;var ry=(cx-x)/20;card.style.transform='translateY(-6px) perspective(800px) rotateX('+rx+'deg) rotateY('+ry+'deg)';});
+        card.addEventListener('mouseleave',function(){card.style.transform='';});
+    });
+
+    document.querySelectorAll('.section').forEach(function(s){new IntersectionObserver(function(entries){if(entries[0].isIntersecting){s.classList.add('visible');}},{threshold:0.08}).observe(s);});
+
+    var sections=document.querySelectorAll('section[id], .hero');var navAs=document.querySelectorAll('[data-n]');
+    window.addEventListener('scroll',function(){var curr='';sections.forEach(function(s){if(window.scrollY>=s.offsetTop-120)curr=s.id;});navAs.forEach(function(a){a.classList.toggle('active',a.getAttribute('href')==='#'+curr);});});
+
+    document.getElementById('copyBtn').addEventListener('click',function(){navigator.clipboard.writeText('trymenghong@gmail.com').then(function(){toast('Email copied!');});});
+
+    var sectionIds=['hero','projects','skills','experience','interests','console','contact'];
+    document.addEventListener('keydown',function(e){
+        if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
+        var num=parseInt(e.key);if(num>=1&&num<=7){e.preventDefault();smoothScroll('#'+sectionIds[num-1]);return;}
+        if(e.key==='t'||e.key==='T'){e.preventDefault();applyTheme(body.classList.contains('dark')?'light':'dark');return;}
+        if(e.key==='Escape'){e.preventDefault();window.scrollTo({top:0,behavior:'smooth'});return;}
+    });
+
+    function confettiBurst(){var colors=['#4f9eff','#a78bfa','#22d3ee','#34d399','#fbbf24','#f87171','#f472b6'];for(var i=0;i<60;i++){var c=document.createElement('div');c.className='confetti';c.style.left=Math.random()*100+'vw';c.style.background=colors[Math.floor(Math.random()*colors.length)];c.style.animationDuration=(Math.random()*2+1.5)+'s';c.style.animationDelay=Math.random()*0.5+'s';c.style.width=(Math.random()*8+6)+'px';c.style.height=(Math.random()*8+6)+'px';document.body.appendChild(c);(function(el){setTimeout(function(){el.remove();},4000);})(c);}}
+
+    var konamiCode=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];var konamiIdx=0;
+    document.addEventListener('keydown',function(e){if(e.target.tagName==='INPUT')return;if(e.key===konamiCode[konamiIdx]){konamiIdx++;if(konamiIdx===konamiCode.length){konamiIdx=0;confettiBurst();toast('You found the secret! You are awesome!');}}else{konamiIdx=0;}});
+
+    var matrixActive=false;
+    function startMatrix(){if(matrixActive)return;matrixActive=true;var canvas=document.getElementById('matrixCanvas');canvas.style.display='block';var ctx=canvas.getContext('2d');canvas.width=window.innerWidth;canvas.height=window.innerHeight;var cols=Math.floor(canvas.width/16);var drops=Array(cols).fill(1);var chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*';var frameCount=0;function drawMatrix(){if(!matrixActive){canvas.style.display='none';ctx.clearRect(0,0,canvas.width,canvas.height);return;}ctx.fillStyle='rgba(5,7,13,0.06)';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#34d399';ctx.font='14px monospace';for(var i=0;i<drops.length;i++){var ch=chars[Math.floor(Math.random()*chars.length)];ctx.fillText(ch,i*16,drops[i]*16);if(drops[i]*16>canvas.height&&Math.random()>0.975)drops[i]=0;drops[i]++;}frameCount++;if(frameCount>300){matrixActive=false;canvas.style.display='none';return;}requestAnimationFrame(drawMatrix);}drawMatrix();}
+
+    var tbody=document.getElementById('tbody');var tinput=document.getElementById('t-input');
+    var CMDS={
+        help:'<span style="color:var(--gold)">Available commands:</span>\n  <span style="color:var(--blue)">about</span>     -- Who is Menghong?\n  <span style="color:var(--blue)">skills</span>    -- Technical skills list\n  <span style="color:var(--blue)">exp</span>       -- Work experience\n  <span style="color:var(--blue)">edu</span>       -- Education background\n  <span style="color:var(--blue)">courses</span>   -- Certifications & courses\n  <span style="color:var(--blue)">contact</span>   -- Get in touch\n  <span style="color:var(--blue)">stats</span>     -- Portfolio stats\n  <span style="color:var(--blue)">langs</span>     -- Languages spoken\n  <span style="color:var(--blue)">interests</span> -- Fun facts & hobbies\n  <span style="color:var(--blue)">matrix</span>    -- Enter the Matrix\n  <span style="color:var(--blue)">confetti</span>  -- Celebrate!\n  <span style="color:var(--blue)">joke</span>      -- Random dev joke\n  <span style="color:var(--blue)">quote</span>     -- Inspirational quote\n  <span style="color:var(--blue)">date</span>      -- Current date & time\n  <span style="color:var(--blue)">version</span>   -- Portfolio version\n  <span style="color:var(--blue)">clear</span>     -- Clear terminal',
+        about:'<span style="color:var(--green)">Try Menghong</span>\n  IT Student @ Build Bright University (2022-2026)\n  Service Advisor @ Kubota Seanghy Group\n  Based in Banteay Meanchey, Cambodia\n  Passionate about Python, Flutter & real-world tools',
+        skills:'<span style="color:var(--green)">Technical:</span>  Python 80% | Java 70% | Flutter/Dart 75% | HTML/CSS/JS 72%\n<span style="color:var(--green)">Tools:</span>      Linux | MS Office | Git | SQLite | Firebase\n<span style="color:var(--green)">Soft:</span>       Customer Service | Inventory | Team Coordination',
+        exp:'<span style="color:var(--gold)">Work Experience:</span>\n  [2025-Now] Service Advisor -- Kubota Seanghy Group\n  [Feb-Sep 2025] Asst. Store Manager -- DJI Agriculture\n  [Sep 2024-Jan 2025] Document Specialist -- Reaksmey Odom Printing\n  [2022-2023] Admin Assistant -- 5 Leaders Benefits Service',
+        edu:'<span style="color:var(--purple)">Education:</span>\n  B.Sc. Information Technology\n  Build Bright University, Cambodia\n  Expected Graduation: 2026\n  Focus: Software Dev | Databases | System Analysis',
+        courses:'<span style="color:var(--gold)">Courses & Certifications:</span>\n  * Website Development (Online)\n  * Basic Barista Skills (Training Center)\n  * Customer Service Excellence (Workplace)\n  * Flutter & Python (Self-Directed)',
+        contact:'<span style="color:var(--green)">Email:</span>    trymenghong@gmail.com\n<span style="color:var(--green)">Phone:</span>    +855 98 931 313\n<span style="color:var(--green)">Location:</span> Banteay Meanchey, Cambodia\n<span style="color:var(--green)">Telegram:</span> @menghongggggg',
+        stats:'<span style="color:var(--blue)">Portfolio Stats:</span>\n  Projects:   9+\n  Experience:  3+ years\n  Customers:   85+ served\n  Commits:     520+',
+        langs:'<span style="color:var(--cyan)">Languages:</span>\n  Khmer   -- Native\n  English -- Intermediate\n  Thai    -- Basic',
+        interests:'<span style="color:var(--pink)">Interests & Fun Facts:</span>\n  * Coffee enthusiast (certified barista!)\n  * Open source contributor\n  * Lo-fi music for coding sessions\n  * Continuous learner exploring AI & Flutter\n  * Proud Cambodian tech builder',
+        matrix:function(){startMatrix();return '<span style="color:var(--green)">Entering the Matrix...</span>';},
+        confetti:function(){confettiBurst();return '<span style="color:var(--gold)">Party time!</span>';},
+        joke:function(){var jokes=['Why do programmers prefer dark mode? Because light attracts bugs.','A SQL query walks into a bar, walks up to two tables and asks... "Can I join you?"','Why do Java developers wear glasses? Because they cannot C#.','!false -- it is funny because it is true.','There are only 10 types of people: those who understand binary and those who don\'t.','How many programmers does it take to change a light bulb? None. That is a hardware problem.','A programmer\'s wife says: "Go to the store and buy a loaf of bread. If they have eggs, buy a dozen." He comes home with 12 loaves.'];return '<span style="color:var(--gold)">'+jokes[Math.floor(Math.random()*jokes.length)]+'</span>';},
+        quote:function(){var quotes=['"The best way to predict the future is to invent it." -- Alan Kay','"Talk is cheap. Show me the code." -- Linus Torvalds','"First, solve the problem. Then, write the code." -- John Johnson','"Code is like humor. When you have to explain it, it is bad." -- Cory House','"Simplicity is the soul of efficiency." -- Austin Freeman','"The only way to do great work is to love what you do." -- Steve Jobs'];return '<span style="color:var(--cyan)">'+quotes[Math.floor(Math.random()*quotes.length)]+'</span>';},
+        date:function(){return '<span style="color:var(--text2)">'+new Date().toLocaleString('en-US',{dateStyle:'full',timeStyle:'medium'})+'</span>';},
+        version:'<span style="color:var(--purple)">Portfolio v3.0</span>\n  Built with HTML, CSS & vanilla JS\n  By Try Menghong | 2026',
+    };
+
+    function addLine(html,color){var d=document.createElement('div');d.className='t-line';d.innerHTML=html;if(color)d.style.color=color;tbody.insertBefore(d,tinput.parentElement);tbody.scrollTop=tbody.scrollHeight;}
+
+    var cmdHistory=[];var historyIdx=-1;
+    tinput.addEventListener('keydown',function(e){
+        if(e.key==='ArrowUp'){e.preventDefault();if(cmdHistory.length>0&&historyIdx<cmdHistory.length-1){historyIdx++;tinput.value=cmdHistory[cmdHistory.length-1-historyIdx];}return;}
+        if(e.key==='ArrowDown'){e.preventDefault();if(historyIdx>0){historyIdx--;tinput.value=cmdHistory[cmdHistory.length-1-historyIdx];}else{historyIdx=-1;tinput.value='';}return;}
+        if(e.key==='Tab'){e.preventDefault();var partial=tinput.value.trim().toLowerCase();if(!partial)return;var matches=Object.keys(CMDS).filter(function(k){return k.startsWith(partial);});if(matches.length===1){tinput.value=matches[0];}else if(matches.length>1){addLine('<span style="color:var(--text3)">'+matches.join('  ')+'</span>');}return;}
+        if(e.key!=='Enter')return;
+        var raw=tinput.value.trim();var cmd=raw.toLowerCase();addLine('<span style="color:var(--blue)">></span> '+raw);tinput.value='';historyIdx=-1;if(!cmd)return;cmdHistory.push(cmd);
+        if(cmd==='clear'){tbody.querySelectorAll('.t-line').forEach(function(l){l.remove();});return;}
+        var res=CMDS[cmd];if(res){addLine(typeof res==='function'?res():res);}else{addLine('<span style="color:var(--red)">Unknown command: "'+cmd+'". Try <span style="color:var(--blue)">help</span></span>');}
+    });
+
+    document.getElementById('logo').addEventListener('click',function(){smoothScroll('#hero');});
+</script>
+</body>
+</html>
